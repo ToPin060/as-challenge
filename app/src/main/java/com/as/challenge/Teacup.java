@@ -12,8 +12,8 @@ import androidx.core.content.res.ResourcesCompat;
 
 public class Teacup extends Drawable {
     private Drawable mDrawable;
-    private int _xTeacup = 200;
-    private int _yTeacup = 200;
+    private int _xTeacup = 350;
+    private int _yTeacup = 350;
     private Context context;
 
     public Teacup(Context context, int resourceId) {
