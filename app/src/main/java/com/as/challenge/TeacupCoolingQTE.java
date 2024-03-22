@@ -11,6 +11,7 @@ public class TeacupCoolingQTE implements QTE{
     private boolean threadRunning = true;
     private SoundMeter soundMeter;
     private Thread thread;
+    private QTE.Callback callback;
 
     public TeacupCoolingQTE(GameView gameView, Drawable teacup) {
         this.gameView = gameView;
@@ -25,7 +26,8 @@ public class TeacupCoolingQTE implements QTE{
         // TODO change teacup img
     }
 
-    public void trigger() {
+    public void trigger(QTE.Callback callback) {
+        this.callback = callback;
         this.soundMeter.start(gameView._activity);
         gameView.post(this::startTimer);
         thread = new Thread(() -> {
@@ -61,6 +63,7 @@ public class TeacupCoolingQTE implements QTE{
             public void onFinish() {
                 threadRunning = false;
                 soundMeter.stop();
+                callback.onQTEFinish();
             }
         }.start();
     }

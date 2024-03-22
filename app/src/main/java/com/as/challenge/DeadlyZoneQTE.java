@@ -19,6 +19,7 @@ public class DeadlyZoneQTE implements QTE {
     private boolean isTimerRunning = false; // Variable to track timer status
     private final Drawable touillette;
     private Thread thread;
+    private QTE.Callback callback;
 
     public DeadlyZoneQTE(GameView gameView, Drawable touillette) {
         this.gameView = gameView;
@@ -51,11 +52,11 @@ public class DeadlyZoneQTE implements QTE {
         }
     }
 
-    public void trigger() {
+    public void trigger(QTE.Callback callback) {
+        this.callback = callback;
         this.isTriggered = true;
         isLeftZone = rd.nextBoolean();
 
-        // TODO kill thread ??
         thread = new Thread(() -> {
             for (int i = 0; i < 5; i++) {
                 drawZone = true;
@@ -87,6 +88,7 @@ public class DeadlyZoneQTE implements QTE {
             @Override
             public void onFinish() {
                 isTimerRunning = false;
+                callback.onQTEFinish();
             }
         }.start();
     }

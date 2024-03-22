@@ -40,28 +40,29 @@ public class GameActivity extends Activity {
         QTEHandler test = new QTEHandler(new QTEHandler.Callback() {
             @Override
             public void onNewQTE(QTEHandler.EVENT_TYPES eventType) {
-                System.out.println("NEW QTE !");
             }
 
             @Override
-            public void launchTeacupCoolingQTE() {
-                System.out.println("CUP COOLING QTE");
+            public QTE launchTeacupCoolingQTE() {
                 if(gameView != null) {
                     TeacupCoolingQTE qte = (TeacupCoolingQTE) gameView.QTEs.get(1); // TODO CHANGE
                     qte.setSoundMeter(soundMeter);
-                    qte.trigger();
+                    return qte;
                 }
+                return null;
             }
 
             @Override
-            public void launchStickBalanceQTE() {
-                System.out.println("STICK BALANCE QTE");
+            public QTE launchStickBalanceQTE() {
+                return null;
             }
 
             @Override
-            public void launchDeadlyZoneQTE() {
-                System.out.println("DEADLY ZONE QTE");
-                if(gameView != null) gameView.QTEs.get(0).trigger(); // TODO CHANGE
+            public QTE launchDeadlyZoneQTE() {
+                if(gameView != null) {
+                    return gameView.QTEs.get(0); // TODO CHANGE
+                }
+                return null;
             }
         });
 
