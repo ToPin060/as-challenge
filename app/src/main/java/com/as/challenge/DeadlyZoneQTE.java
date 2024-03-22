@@ -10,7 +10,7 @@ import android.os.CountDownTimer;
 import java.util.Random;
 
 public class DeadlyZoneQTE {
-    private final int flashInterval = 300; // Time between flashes in milliseconds
+    private static final int FLASH_INTERVAL = 300; // Time between flashes in milliseconds
     boolean isLeftZone;
     private boolean drawZone = false;
     private final GameView gameView;
@@ -27,17 +27,28 @@ public class DeadlyZoneQTE {
     }
 
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.rgb(250, 0, 0));
-
         if (drawZone || isTimerRunning) {
+            Paint paint = new Paint();
+            paint.setColor(Color.rgb(250, 0, 0));
             canvas.drawRect(getZoneBox(), paint);
         }
     }
 
     public Rect getZoneBox() {
-        if(isLeftZone) return new Rect(0, gameView.getHeight() / 2, gameView.getWidth() / 2, gameView.getHeight());
-        else return new Rect(gameView.getWidth() / 2, gameView.getHeight() / 2, gameView.getWidth(), gameView.getHeight());
+        int width = gameView.getWidth();
+        int height = gameView.getHeight();
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+        if (isLeftZone) return new Rect(0, halfHeight, halfWidth, height);
+        return new Rect(halfWidth, halfHeight, width, height);
+    }
+
+    private void sleepForInterval() {
+        try {
+            Thread.sleep(FLASH_INTERVAL);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void trigger() {
@@ -45,29 +56,20 @@ public class DeadlyZoneQTE {
         isLeftZone = rd.nextBoolean();
         new Thread(() -> {
             for (int i = 0; i < 5; i++) {
-                this.drawZone = true;
+                drawZone = true;
                 gameView.postInvalidate();
-                try {
-                    Thread.sleep(flashInterval);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                this.drawZone = false;
+                sleepForInterval();
+                drawZone = false;
                 gameView.postInvalidate();
-                try {
-                    Thread.sleep(flashInterval);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sleepForInterval();
             }
             gameView.post(() -> startTimer());
             maybeKillTouillette();
         }).start();
-
     }
 
     private boolean maybeKillTouillette() {
-        // TODO KILL TOUILLETTE
+        // TODO KILL TOUILLETTE / GAME OVER
        return getZoneBox().contains(touillette.getBounds().centerX(), touillette.getBounds().centerY());
     }
 
