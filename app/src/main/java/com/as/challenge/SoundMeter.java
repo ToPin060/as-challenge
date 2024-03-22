@@ -11,9 +11,9 @@ import androidx.core.app.ActivityCompat;
 public class SoundMeter {
 
     private static final int sampleRate = 8000;
+    private final static int MIN_BLOWING_AMPLITUDE = 5000;
     private AudioRecord audioRecord = null;
     private int minSize;
-    private final static int MIN_BLOWING_AMPLITUDE = 5000;
 
     public void start(Context context) {
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
