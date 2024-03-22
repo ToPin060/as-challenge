@@ -26,16 +26,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
     private final GameThread _thread;
 
     private Drawable _touillette;
-    private Drawable _teacup;
+    private Teacup _teacup;
 
     private int _x;
     private int _y;
     private int _xTou = 300;
     private int _yTou = 800;
-    private int _xTeacup = 200;
-    private int _yTeacup = 200;
     private boolean _isTouching = false;
     private boolean _touchingTouillette = false;
+    private final TeacupCoolingQTE teacupCoolingQTE;
 
     public GameView(Context context_) {
         super(context_);
@@ -48,11 +47,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         setTouillette(context_, R.drawable.touillette_neutral);
         setTouilletteCoords(_xTou, _yTou);
 
-        setTeacup(context_, R.drawable.teacup_neutral_xxhdpi);
-        setTeacupCoords(_xTeacup, _yTeacup);
+        _teacup = new Teacup(_activity, R.drawable.teacup_neutral_avg_size);
+
 
         this.QTEs.add(new DeadlyZoneQTE(this, _touillette));
-        this.QTEs.add(new TeacupCoolingQTE(this, _teacup));
+        teacupCoolingQTE = new TeacupCoolingQTE(this, _teacup);
+        this.QTEs.add(teacupCoolingQTE);
 
         setOnTouchListener(this);
         setFocusable(true);
@@ -60,21 +60,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
     public void setTouillette(Context context_, int ressource_) {
         _touillette = ResourcesCompat.getDrawable(context_.getResources(), ressource_, null);
-    }
-
-    public void setTeacup(Context context_, int ressource_) {
-        _teacup = ResourcesCompat.getDrawable(context_.getResources(), ressource_, null);
-    }
-
-    public void setTeacupCoords(int x_, int y_) {
-
-        _xTeacup = x_;
-        _yTeacup = y_;
-
-        _teacup.setBounds(x_ - _teacup.getIntrinsicWidth() / 2,
-            y_ - _teacup.getIntrinsicHeight() / 2,
-            x_ + _teacup.getIntrinsicWidth() / 2,
-            y_ + _teacup.getIntrinsicHeight() / 2);
     }
 
     public void setTouilletteCoords(int x_, int y_) {

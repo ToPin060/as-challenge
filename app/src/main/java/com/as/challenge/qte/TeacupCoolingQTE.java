@@ -1,11 +1,16 @@
 package com.as.challenge.qte;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.as.challenge.GameView;
+import com.as.challenge.R;
 import com.as.challenge.SoundMeter;
+import com.as.challenge.Teacup;
 import com.as.challenge.qte.QTE;
 
 import java.util.ArrayDeque;
@@ -14,7 +19,7 @@ import java.util.Queue;
 
 public class TeacupCoolingQTE implements QTE {
     private final GameView gameView;
-    private final Drawable teacup;
+    private Teacup teacup;
     private boolean isTriggered = false;
     private boolean threadRunning = true;
     private SoundMeter soundMeter;
@@ -22,7 +27,7 @@ public class TeacupCoolingQTE implements QTE {
     private QTE.Callback callback;
     private int temperature = 5; // TODO MAP EACH TEMPERATURE TO AN IMAGE OF TEACUP
 
-    public TeacupCoolingQTE(GameView gameView, Drawable teacup) {
+    public TeacupCoolingQTE(GameView gameView, Teacup teacup) {
         this.gameView = gameView;
         this.teacup = teacup;
     }
@@ -36,8 +41,10 @@ public class TeacupCoolingQTE implements QTE {
     }
 
     public void trigger(QTE.Callback callback) {
+        if(teacup == null) return;
         this.callback = callback;
-
+        isTriggered = true;
+        teacup.setDrawableResource(R.drawable.teacup_2_hot);
         this.soundMeter.start(gameView._activity);
         gameView.post(this::startTimer);
         Queue<Boolean> values = new ArrayDeque<>(4);
@@ -69,13 +76,18 @@ public class TeacupCoolingQTE implements QTE {
 
     private void finishQTE(){
         // TODO CHECK IF TEACUP STILL HOT do something
+        if(temperature <= 0) {
+            teacup.setDrawableResource(R.drawable.teacup_neutral_avg_size);
+        }
         threadRunning = false;
+        isTriggered = false;
         soundMeter.stop();
         callback.onQTEFinish();
+        temperature = 5; // reset
     }
 
     public boolean isTriggered() {
-        return false;
+        return isTriggered;
     }
 
     private void startTimer() {
