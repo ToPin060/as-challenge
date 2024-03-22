@@ -1,9 +1,12 @@
 package com.as.challenge;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -11,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.as.challenge.utility.Constants;
 
@@ -19,9 +23,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
     private GameActivity _activity;
     private GameThread _thread;
 
-    private int _x = 0;
-    private int _y = 0;
+    private Drawable _touillette;
+
+    private int _x;
+    private int _y;
+    private int _xTou = 300;
+    private int _yTou = 800;
     private boolean _isTouching= false;
+    private boolean _touchingTouillette = false;
+
 
     public GameView(Context context_) {
         super(context_);
@@ -29,10 +39,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
         _activity = (GameActivity) context_;
         _thread = new GameThread(getHolder(), this);
-        _y = _activity.getSharedPreferences().getInt(Constants.KEY_VALUE_Y, 1);
+
+        setTouillette(context_, R.drawable.emoji_grimacing);
+        setTouilletteCoords(_xTou, _yTou);
 
         setOnTouchListener(this);
         setFocusable(true);
+    }
+
+    public void setTouillette(Context context_, int ressource_){
+        _touillette = ResourcesCompat.getDrawable(context_.getResources(), ressource_, null);
+    }
+
+    public void setTouilletteCoords(int x_, int y_){
+
+        _xTou = x_;
+        _yTou = y_;
+
+        _touillette.setBounds(x_ - _touillette.getIntrinsicWidth() / 2,
+                y_ - _touillette.getIntrinsicHeight() / 2,
+                x_ + _touillette.getIntrinsicWidth() / 2,
+                y_ + _touillette.getIntrinsicHeight() / 2);
     }
 
     @Override
@@ -63,7 +90,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         super.draw(canvas);
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
+            setTouilletteCoords(_xTou, _yTou);
+            _touillette.draw(canvas);
 
+            _touchingTouillette = (_xTou - _touillette.getIntrinsicWidth() / 2) < _x &&
+                    (_xTou + _touillette.getIntrinsicWidth() / 2) > _x &&
+                    (_yTou - _touillette.getIntrinsicHeight() / 2) < _y &&
+                    (_yTou + _touillette.getIntrinsicHeight() / 2) > _y;
+
+            if (_isTouching) {
+                setTouilletteCoords(_x,_y);
+            }
         }
     }
     @Override
@@ -71,12 +108,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                _isTouching = true;
                 _x = (int) event.getX();
                 _y = (int) event.getY();
+                if(_touchingTouillette){
+                    _isTouching = true;
+                }
+
                 break;
             case MotionEvent.ACTION_UP:
                 _isTouching = false;
+
+                if (_xTou <=_touillette.getBounds().width() && _yTou <=_touillette.getBounds().height()){
+                    _x = 500;
+                    _y = 500;
+                }
+                else {
+                    _x = 0;
+                    _y = 0;
+                }
                 break;
         }
         return true;
@@ -84,6 +133,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
     public void update() {
         if (_isTouching){
+
+            boolean touilletteIsNull = _touillette == null;
+
             Log.d("TOUCH", "X -> "+ _x);
             Log.d("TOUCH", "Y -> "+_y);
             Log.d("TOUCH", "Touch -> "+ _isTouching);
