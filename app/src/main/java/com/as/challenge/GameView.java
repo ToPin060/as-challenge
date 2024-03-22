@@ -40,7 +40,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         _activity = (GameActivity) context_;
         _thread = new GameThread(getHolder(), this);
 
-        setTouillette(context_, R.drawable.emoji_grimacing);
+        setTouillette(context_, R.drawable.touillette_neutral);
         setTouilletteCoords(_xTou, _yTou);
 
         setOnTouchListener(this);
