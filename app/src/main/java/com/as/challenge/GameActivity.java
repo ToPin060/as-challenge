@@ -38,6 +38,11 @@ public class GameActivity extends Activity {
         // TODO REMOVE : Exemple usage of QTEHandler
         QTEHandler test = new QTEHandler(new QTEHandler.Callback() {
             @Override
+            public void onNewQTE(QTEHandler.EVENT_TYPES eventType) {
+                System.out.println("NEW QTE !");
+            }
+
+            @Override
             public void launchCupCoolingQTE() {
                 System.out.println("CUP COOLING QTE");
             }
