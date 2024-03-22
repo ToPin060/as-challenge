@@ -20,6 +20,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".DefeatActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameActivity">
         </activity>
     </application>
