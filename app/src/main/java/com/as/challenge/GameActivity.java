@@ -12,6 +12,9 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.as.challenge.accelerometer.AccelerometerManager;
+import com.as.challenge.qte.QTE;
+import com.as.challenge.qte.QTEHandler;
+import com.as.challenge.qte.TeacupCoolingQTE;
 import com.as.challenge.utility.Constants;
 
 public class GameActivity extends Activity {
@@ -43,23 +46,29 @@ public class GameActivity extends Activity {
         QTEHandler test = new QTEHandler(new QTEHandler.Callback() {
             @Override
             public void onNewQTE(QTEHandler.EVENT_TYPES eventType) {
-                System.out.println("NEW QTE !");
             }
 
             @Override
-            public void launchCupCoolingQTE() {
-                System.out.println("CUP COOLING QTE");
+            public QTE launchTeacupCoolingQTE() {
+                if(_gameView != null) {
+                    TeacupCoolingQTE qte = (TeacupCoolingQTE) _gameView.QTEs.get(1); // TODO CHANGE
+                    qte.setSoundMeter(soundMeter);
+                    return qte;
+                }
+                return null;
             }
 
             @Override
-            public void launchStickBalanceQTE() {
-                System.out.println("STICK BALANCE QTE");
+            public QTE launchStickBalanceQTE() {
+                return null;
             }
 
             @Override
-            public void launchDeadlyZoneQTE() {
-                System.out.println("DEADLY ZONE QTE");
-                _gameView.deadlyZoneQTE.trigger();
+            public QTE launchDeadlyZoneQTE() {
+                if(_gameView != null) {
+                    return _gameView.QTEs.get(0); // TODO CHANGE
+                }
+                return null;
             }
         });
 
@@ -70,6 +79,13 @@ public class GameActivity extends Activity {
         setContentView(_gameView);
     }
 
+  private void setupSoundMeter() {
+        soundMeter = new SoundMeter();
+        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
+        }
+    }
+  
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -112,13 +128,6 @@ public class GameActivity extends Activity {
         SharedPreferences.Editor editor = _sharedPreferences.edit();
         editor.putInt("VALUE_Y", valeur_y);
         editor.apply();
-    }
-
-    private void setupSoundMeter() {
-        soundMeter = new SoundMeter();
-        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
-        } else soundMeter.start(this);
     }
 
     private void handleSoundMeterPermissionResult(@NonNull int[] grantResults) {

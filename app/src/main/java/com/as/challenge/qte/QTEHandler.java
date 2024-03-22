@@ -1,4 +1,4 @@
-package com.as.challenge;
+package com.as.challenge.qte;
 
 import static java.lang.Thread.sleep;
 
@@ -9,6 +9,7 @@ public class QTEHandler {
     private static final int MAX_SLEEP_TIME_MS = 15000;
     private final Callback callback;
     private final Random random;
+    private boolean QTEInProgress = false;
 
     public QTEHandler(Callback callback) {
         this.callback = callback;
@@ -27,6 +28,16 @@ public class QTEHandler {
         }).start();
     }
 
+    private void launchQTE(QTE qte){
+        if(qte == null || QTEInProgress) return;
+        System.out.println("Launched QTE " + qte.getClass().getName());
+        QTEInProgress = true;
+        qte.trigger(() -> {
+            System.out.println("Stopped QTE " + qte.getClass().getName());
+            QTEInProgress = false;
+        });
+    }
+
     private void generateRandomEvent() {
         int eventTypeIndex = random.nextInt(EVENT_TYPES.values().length);
         EVENT_TYPES eventType = EVENT_TYPES.values()[eventTypeIndex];
@@ -34,29 +45,29 @@ public class QTEHandler {
         callback.onNewQTE(eventType);
 
         switch (eventType) {
-            case CUP_COOLING:
-                callback.launchCupCoolingQTE();
+            case TEACUP_COOLING:
+                launchQTE(callback.launchTeacupCoolingQTE());
                 break;
             case STICK_BALANCE:
-                callback.launchStickBalanceQTE();
+                launchQTE(callback.launchStickBalanceQTE());
                 break;
             case DEADLY_ZONES:
-                callback.launchDeadlyZoneQTE();
+                launchQTE(callback.launchDeadlyZoneQTE());
                 break;
         }
     }
 
-    enum EVENT_TYPES {
-        CUP_COOLING, STICK_BALANCE, DEADLY_ZONES
+    public enum EVENT_TYPES {
+        TEACUP_COOLING, STICK_BALANCE, DEADLY_ZONES
     }
 
     public interface Callback {
         void onNewQTE(EVENT_TYPES eventType);
 
-        void launchCupCoolingQTE();
+        QTE launchTeacupCoolingQTE();
 
-        void launchStickBalanceQTE();
+        QTE launchStickBalanceQTE();
 
-        void launchDeadlyZoneQTE();
+        QTE launchDeadlyZoneQTE();
     }
 }

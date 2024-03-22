@@ -13,18 +13,27 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.as.challenge.qte.DeadlyZoneQTE;
+import com.as.challenge.qte.QTE;
+import com.as.challenge.qte.TeacupCoolingQTE;
+
+import java.util.ArrayList;
+
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
-    public DeadlyZoneQTE deadlyZoneQTE;
-    private final GameActivity _activity;
+    public ArrayList<QTE> QTEs = new ArrayList<>();
+    public final GameActivity _activity;
     private final GameThread _thread;
 
     private Drawable _touillette;
+    private Drawable _teacup;
 
     private int _x;
     private int _y;
     private int _xTou = 300;
     private int _yTou = 800;
+    private int _xTeacup = 200;
+    private int _yTeacup = 200;
     private boolean _isTouching = false;
     private boolean _touchingTouillette = false;
 
@@ -39,7 +48,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         setTouillette(context_, R.drawable.touillette_neutral);
         setTouilletteCoords(_xTou, _yTou);
 
-        deadlyZoneQTE = new DeadlyZoneQTE(this, _touillette);
+        setTeacup(context_, R.drawable.teacup_neutral_xxhdpi);
+        setTeacupCoords(_xTeacup, _yTeacup);
+
+        this.QTEs.add(new DeadlyZoneQTE(this, _touillette));
+        this.QTEs.add(new TeacupCoolingQTE(this, _teacup));
 
         setOnTouchListener(this);
         setFocusable(true);
@@ -47,6 +60,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
     public void setTouillette(Context context_, int ressource_) {
         _touillette = ResourcesCompat.getDrawable(context_.getResources(), ressource_, null);
+    }
+
+    public void setTeacup(Context context_, int ressource_) {
+        _teacup = ResourcesCompat.getDrawable(context_.getResources(), ressource_, null);
+    }
+
+    public void setTeacupCoords(int x_, int y_) {
+
+        _xTeacup = x_;
+        _yTeacup = y_;
+
+        _teacup.setBounds(x_ - _teacup.getIntrinsicWidth() / 2,
+            y_ - _teacup.getIntrinsicHeight() / 2,
+            x_ + _teacup.getIntrinsicWidth() / 2,
+            y_ + _teacup.getIntrinsicHeight() / 2);
     }
 
     public void setTouilletteCoords(int x_, int y_) {
@@ -96,6 +124,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
             setTouilletteCoords(_xTou, _yTou);
             _touillette.draw(canvas);
+            _teacup.draw(canvas);
 
             _touchingTouillette = (_xTou - _touillette.getIntrinsicWidth() / 2) < _x &&
                 (_xTou + _touillette.getIntrinsicWidth() / 2) > _x &&
@@ -136,7 +165,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
     }
 
     private void handleQTEs(Canvas canvas) {
-        if (deadlyZoneQTE.isTriggered()) deadlyZoneQTE.draw(canvas);
+        this.QTEs.forEach(qte -> {
+            if (qte.isTriggered()) qte.draw(canvas);
+        });
     }
 
     public void update() {
