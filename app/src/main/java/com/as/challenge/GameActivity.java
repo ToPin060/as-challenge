@@ -12,6 +12,9 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.as.challenge.accelerometer.AccelerometerManager;
+import com.as.challenge.qte.QTE;
+import com.as.challenge.qte.QTEHandler;
+import com.as.challenge.qte.TeacupCoolingQTE;
 import com.as.challenge.utility.Constants;
 
 public class GameActivity extends Activity {
@@ -47,8 +50,8 @@ public class GameActivity extends Activity {
 
             @Override
             public QTE launchTeacupCoolingQTE() {
-                if(gameView != null) {
-                    TeacupCoolingQTE qte = (TeacupCoolingQTE) gameView.QTEs.get(1); // TODO CHANGE
+                if(_gameView != null) {
+                    TeacupCoolingQTE qte = (TeacupCoolingQTE) _gameView.QTEs.get(1); // TODO CHANGE
                     qte.setSoundMeter(soundMeter);
                     return qte;
                 }

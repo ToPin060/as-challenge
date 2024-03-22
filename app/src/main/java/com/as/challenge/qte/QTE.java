@@ -1,8 +1,6 @@
-package com.as.challenge;
+package com.as.challenge.qte;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
 public interface QTE {
     public interface Callback {

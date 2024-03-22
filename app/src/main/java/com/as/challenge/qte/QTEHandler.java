@@ -1,4 +1,4 @@
-package com.as.challenge;
+package com.as.challenge.qte;
 
 import static java.lang.Thread.sleep;
 
@@ -57,7 +57,7 @@ public class QTEHandler {
         }
     }
 
-    enum EVENT_TYPES {
+    public enum EVENT_TYPES {
         TEACUP_COOLING, STICK_BALANCE, DEADLY_ZONES
     }
 

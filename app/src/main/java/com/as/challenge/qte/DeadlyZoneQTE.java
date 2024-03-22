@@ -1,4 +1,4 @@
-package com.as.challenge;
+package com.as.challenge.qte;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
+
+import com.as.challenge.GameView;
 
 import java.util.Random;
 

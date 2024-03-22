@@ -13,6 +13,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.as.challenge.qte.DeadlyZoneQTE;
+import com.as.challenge.qte.QTE;
+import com.as.challenge.qte.TeacupCoolingQTE;
+
 import java.util.ArrayList;
 
 

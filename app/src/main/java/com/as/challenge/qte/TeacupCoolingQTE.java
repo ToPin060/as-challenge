@@ -1,10 +1,18 @@
-package com.as.challenge;
+package com.as.challenge.qte;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 
-public class TeacupCoolingQTE implements QTE{
+import com.as.challenge.GameView;
+import com.as.challenge.SoundMeter;
+import com.as.challenge.qte.QTE;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+
+public class TeacupCoolingQTE implements QTE {
     private final GameView gameView;
     private final Drawable teacup;
     private boolean isTriggered = false;
@@ -12,6 +20,7 @@ public class TeacupCoolingQTE implements QTE{
     private SoundMeter soundMeter;
     private Thread thread;
     private QTE.Callback callback;
+    private int temperature = 5; // TODO MAP EACH TEMPERATURE TO AN IMAGE OF TEACUP
 
     public TeacupCoolingQTE(GameView gameView, Drawable teacup) {
         this.gameView = gameView;
@@ -28,13 +37,23 @@ public class TeacupCoolingQTE implements QTE{
 
     public void trigger(QTE.Callback callback) {
         this.callback = callback;
+
         this.soundMeter.start(gameView._activity);
         gameView.post(this::startTimer);
+        Queue<Boolean> values = new ArrayDeque<>(4);
         thread = new Thread(() -> {
             while (threadRunning) {
-                sleepForInterval(500);
-                System.out.println("IS BLOWING ? " + soundMeter.isBlowingOnMicrophone());
-                // Cool down teacup
+                System.out.println("TEACUP TEMPERATURE : " + temperature);
+                sleepForInterval(1000);
+                boolean isBlowing = soundMeter.isBlowingOnMicrophone();
+                System.out.println("IS BLOWING ? " + isBlowing);
+                if(values.size() == 4) values.poll();
+                values.offer(isBlowing);
+
+                if(values.stream().anyMatch(Boolean::booleanValue)) {
+                    temperature--;
+                    if(temperature == 0) finishQTE();
+                }
             }
         });
         thread.start();
@@ -48,12 +67,19 @@ public class TeacupCoolingQTE implements QTE{
         }
     }
 
+    private void finishQTE(){
+        // TODO CHECK IF TEACUP STILL HOT do something
+        threadRunning = false;
+        soundMeter.stop();
+        callback.onQTEFinish();
+    }
+
     public boolean isTriggered() {
         return false;
     }
 
     private void startTimer() {
-        new CountDownTimer(3500, 1000) {
+        new CountDownTimer(10000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 threadRunning = true;
@@ -61,9 +87,7 @@ public class TeacupCoolingQTE implements QTE{
 
             @Override
             public void onFinish() {
-                threadRunning = false;
-                soundMeter.stop();
-                callback.onQTEFinish();
+                if(threadRunning) finishQTE();
             }
         }.start();
     }
