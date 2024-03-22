@@ -34,8 +34,8 @@ public class QTEHandler {
         callback.onNewQTE(eventType);
 
         switch (eventType) {
-            case CUP_COOLING:
-                callback.launchCupCoolingQTE();
+            case TEACUP_COOLING:
+                callback.launchTeacupCoolingQTE();
                 break;
             case STICK_BALANCE:
                 callback.launchStickBalanceQTE();
@@ -47,13 +47,13 @@ public class QTEHandler {
     }
 
     enum EVENT_TYPES {
-        CUP_COOLING, STICK_BALANCE, DEADLY_ZONES
+        TEACUP_COOLING, STICK_BALANCE, DEADLY_ZONES
     }
 
     public interface Callback {
         void onNewQTE(EVENT_TYPES eventType);
 
-        void launchCupCoolingQTE();
+        void launchTeacupCoolingQTE();
 
         void launchStickBalanceQTE();
 

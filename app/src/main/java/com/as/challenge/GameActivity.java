@@ -44,8 +44,13 @@ public class GameActivity extends Activity {
             }
 
             @Override
-            public void launchCupCoolingQTE() {
+            public void launchTeacupCoolingQTE() {
                 System.out.println("CUP COOLING QTE");
+                if(gameView != null) {
+                    TeacupCoolingQTE qte = (TeacupCoolingQTE) gameView.QTEs.get(1); // TODO CHANGE
+                    qte.setSoundMeter(soundMeter);
+                    qte.trigger();
+                }
             }
 
             @Override
@@ -56,7 +61,7 @@ public class GameActivity extends Activity {
             @Override
             public void launchDeadlyZoneQTE() {
                 System.out.println("DEADLY ZONE QTE");
-                gameView.deadlyZoneQTE.trigger();
+                if(gameView != null) gameView.QTEs.get(0).trigger(); // TODO CHANGE
             }
         });
 
@@ -69,28 +74,7 @@ public class GameActivity extends Activity {
         soundMeter = new SoundMeter();
         if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
-        } else soundMeter.start(this);
-    }
-
-    private void handleSoundMeterPermissionResult(@NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            soundMeter.start(this);
-        } else {
-            // TODO Handle microphone permission denied
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        soundMeter.stop();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == RECORD_AUDIO_REQUEST_CODE)
-            handleSoundMeterPermissionResult(grantResults);
     }
 
     private void recoverEnvironment() {

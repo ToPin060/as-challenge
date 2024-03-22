@@ -9,16 +9,16 @@ import android.os.CountDownTimer;
 
 import java.util.Random;
 
-public class DeadlyZoneQTE {
+public class DeadlyZoneQTE implements QTE {
     private static final int FLASH_INTERVAL = 300; // Time between flashes in milliseconds
     private final GameView gameView;
     private final Random rd;
-    boolean isLeftZone;
+    private boolean isLeftZone;
     private boolean drawZone = false;
     private boolean isTriggered = false;
     private boolean isTimerRunning = false; // Variable to track timer status
-    private CountDownTimer countDownTimer; // Timer object
     private final Drawable touillette;
+    private Thread thread;
 
     public DeadlyZoneQTE(GameView gameView, Drawable touillette) {
         this.gameView = gameView;
@@ -54,7 +54,9 @@ public class DeadlyZoneQTE {
     public void trigger() {
         this.isTriggered = true;
         isLeftZone = rd.nextBoolean();
-        new Thread(() -> {
+
+        // TODO kill thread ??
+        thread = new Thread(() -> {
             for (int i = 0; i < 5; i++) {
                 drawZone = true;
                 gameView.postInvalidate();
@@ -65,7 +67,9 @@ public class DeadlyZoneQTE {
             }
             gameView.post(() -> startTimer());
             maybeKillTouillette();
-        }).start();
+        });
+
+        thread.start();
     }
 
     private boolean maybeKillTouillette() {
@@ -74,7 +78,7 @@ public class DeadlyZoneQTE {
     }
 
     private void startTimer() {
-        countDownTimer = new CountDownTimer(3500, 1000) {
+        new CountDownTimer(3500, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 isTimerRunning = true;
@@ -84,8 +88,7 @@ public class DeadlyZoneQTE {
             public void onFinish() {
                 isTimerRunning = false;
             }
-        };
-        countDownTimer.start();
+        }.start();
     }
 
     public boolean isTriggered() {
