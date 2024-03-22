@@ -32,7 +32,6 @@ public class AccelerometerManager {
         }
 
         initializeEventListener();
-        initializeBehavior();
     }
 
     public void initializeEventListener() {
@@ -43,12 +42,12 @@ public class AccelerometerManager {
                 float y = calibrateSensorValue(event.values[1]);
                 float z = calibrateSensorValue(event.values[2]);
 
-                // TODO: Keep for debug
-                if (x > _xMax) _xMax = x;
-                if (y > _yMax) _yMax = y;
-                if (z > _zMax) _zMax = z;
-
-                _behavior.behavior(x, y, z);
+                if (x > _threshold || y > _threshold || z > _threshold) {
+                    Log.d(TAG, "SHAKE DETECTED");
+                    if (_behavior != null) {
+                        _behavior.behavior(x, y, z);
+                    }
+                }
             }
 
             @Override
@@ -63,21 +62,14 @@ public class AccelerometerManager {
         _sensorManager.unregisterListener(_sensorEventListener);
     }
 
-    private void initializeBehavior() {
-        _behavior = new AccelerometerBehavior() {
-            @Override
-            public void behavior(float x_, float y_, float z_) {
-                if (x_ > _threshold || y_ > _threshold || z_ > _threshold) {
-                    Log.d(TAG, "SHAKE DETECTED");
-                }
-            }
-        };
-    }
 
     public float calibrateSensorValue(float value) {
         return (float) (((int) (value*10)) /10);
     }
 
+    public AccelerometerBehavior getBehavior() {
+        return _behavior;
+    }
     public void setBehavior(AccelerometerBehavior behavior_) {
         _behavior = behavior_;
     }

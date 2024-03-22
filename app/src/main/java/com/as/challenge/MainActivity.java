@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 
+import com.as.challenge.easteregg.EasterEggActivity;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -23,6 +25,14 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button easterBtn = findViewById(R.id.easterBtn);
+        easterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentMain = new Intent(MainActivity.this, EasterEggActivity.class);
+                MainActivity.this.startActivity(intentMain);
+            }
+        });
     }
 
 

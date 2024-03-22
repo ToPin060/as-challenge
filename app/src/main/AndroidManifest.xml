@@ -16,19 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Challenge"
         tools:targetApi="31">
-        <activity android:name=".MainActivity"
+        <activity android:name=".easteregg.EasterEggActivity" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".DefeatActivity"
-            android:exported="false" />
+        <activity android:name=".DefeatActivity" />
         <activity
             android:name=".GameActivity">
         </activity>
     </application>
-
 </manifest>
