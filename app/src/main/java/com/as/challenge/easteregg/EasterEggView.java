@@ -1,22 +1,26 @@
 package com.as.challenge.easteregg;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.as.challenge.R;
 import com.as.challenge.utility.Constants;
 
 public class EasterEggView extends SurfaceView implements SurfaceHolder.Callback {
+    private final int _windowWidth, _windowHeigh;
     private EasterEggActivity _activity;
     private EasterEggThread _thread;
 
-    private int _x = 0;
-    private int _y = 1;
+    private Drawable _teacup;
 
     public EasterEggView(Context context_) {
         super(context_);
@@ -24,6 +28,16 @@ public class EasterEggView extends SurfaceView implements SurfaceHolder.Callback
 
         _activity = (EasterEggActivity) context_;
         _thread = new EasterEggThread(getHolder(), this);
+
+        _windowWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        _windowHeigh = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+        _teacup = ResourcesCompat.getDrawable(context_.getResources(), R.drawable.teacup_neutral_avg_size, null);
+        _teacup.setBounds(
+                _windowWidth / 2 - _teacup.getIntrinsicWidth() / 2 + 40,
+                _windowHeigh - _teacup.getIntrinsicHeight() - 100,
+                _windowWidth - _teacup.getIntrinsicWidth() / 2 + 40,
+                _windowHeigh - 100);
 
         setFocusable(true);
     }
@@ -34,9 +48,7 @@ public class EasterEggView extends SurfaceView implements SurfaceHolder.Callback
         _thread.start();
     }
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) { }
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         boolean retry = true;
@@ -56,14 +68,12 @@ public class EasterEggView extends SurfaceView implements SurfaceHolder.Callback
         super.draw(canvas);
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
-
-            Paint paint = new Paint();
-            paint.setColor(Color.rgb(250, 0 , 0));
-            canvas.drawRect(_x, 100 * _y, _x +100, 200, paint);
+            _teacup.draw(canvas);
         }
     }
+
     public void update() {
-        _x = (_x + 1) % 300;
+
     }
 
 }
