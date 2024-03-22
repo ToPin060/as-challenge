@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
+import com.as.challenge.accelerometer.AccelerometerBehavior;
 import com.as.challenge.accelerometer.AccelerometerManager;
 
 public class EasterEggActivity extends Activity {
@@ -43,5 +44,9 @@ public class EasterEggActivity extends Activity {
     protected void onStop() {
         super.onStop();
         _accelerometerManager.stop();
+    }
+
+    public AccelerometerManager getAccelerometerManager() {
+        return _accelerometerManager;
     }
 }
