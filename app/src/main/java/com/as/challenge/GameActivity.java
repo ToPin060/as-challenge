@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -23,7 +21,7 @@ public class GameActivity extends Activity {
 
     private SharedPreferences _sharedPreferences;
     private SoundMeter soundMeter;
-    private GameView gameView;
+    private GameView _gameView;
     private AccelerometerManager _accelerometerManager;
 
     @Override
@@ -64,21 +62,18 @@ public class GameActivity extends Activity {
 
             @Override
             public QTE launchDeadlyZoneQTE() {
-                if(gameView != null) {
-                    return gameView.QTEs.get(0); // TODO CHANGE
+                if(_gameView != null) {
+                    return _gameView.QTEs.get(0); // TODO CHANGE
                 }
                 return null;
             }
         });
 
-        //setContentView(new GameView(this));
-        setContentView(R.layout.debug_accelerometer);
-
         setupSoundMeter();
         _accelerometerManager = new AccelerometerManager(this);
 
-        gameView = new GameView(this);
-        setContentView(gameView);
+        _gameView = new GameView(this);
+        setContentView(_gameView);
     }
 
   private void setupSoundMeter() {
