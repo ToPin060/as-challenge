@@ -6,19 +6,20 @@ import java.util.Random;
 
 public class QTEHandler {
     enum EVENT_TYPES {
-        CUP_COOLING, STICK_BALANCE
+        CUP_COOLING, STICK_BALANCE, DEADLY_ZONES
     }
 
     public interface Callback {
         void onNewQTE(EVENT_TYPES eventType);
         void launchCupCoolingQTE();
         void launchStickBalanceQTE();
+        void launchDeadlyZoneQTE();
     }
 
     private Callback callback;
     private Random random;
-    private static final int MIN_SLEEP_TIME_MS = 10000;
-    private static final int MAX_SLEEP_TIME_MS = 30000;
+    private static final int MIN_SLEEP_TIME_MS = 1000;
+    private static final int MAX_SLEEP_TIME_MS = 3000;
 
     public QTEHandler(Callback callback) {
         this.callback = callback;
@@ -49,6 +50,9 @@ public class QTEHandler {
                 break;
             case STICK_BALANCE:
                 callback.launchStickBalanceQTE();
+                break;
+            case DEADLY_ZONES:
+                callback.launchDeadlyZoneQTE();
                 break;
         }
     }

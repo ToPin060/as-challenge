@@ -19,6 +19,7 @@ public class GameActivity extends Activity {
     private SharedPreferences _sharedPreferences;
     private final boolean _resetEnvironmentFlag = true;
     private SoundMeter soundMeter;
+    private GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,17 @@ public class GameActivity extends Activity {
             public void launchStickBalanceQTE() {
                 System.out.println("STICK BALANCE QTE");
             }
+
+            @Override
+            public void launchDeadlyZoneQTE() {
+                System.out.println("DEADLY ZONE QTE");
+                gameView.deadlyZoneQTE.trigger();
+            }
         });
 
         setupSoundMeter();
-        setContentView(new GameView(this));
+        gameView = new GameView(this);
+        setContentView(gameView);
     }
 
     private void setupSoundMeter() {
