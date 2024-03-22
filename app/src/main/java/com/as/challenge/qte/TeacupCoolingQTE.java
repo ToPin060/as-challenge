@@ -77,7 +77,7 @@ public class TeacupCoolingQTE implements QTE {
     private void finishQTE(){
         // TODO CHECK IF TEACUP STILL HOT do something
         if(temperature <= 0) {
-            teacup.setDrawableResource(R.drawable.teacup_neutral_xxhdpi);
+            teacup.setDrawableResource(R.drawable.teacup_neutral_avg_size);
         }
         threadRunning = false;
         isTriggered = false;
