@@ -10,6 +10,7 @@ public class QTEHandler {
     }
 
     public interface Callback {
+        void onNewQTE(EVENT_TYPES eventType);
         void launchCupCoolingQTE();
         void launchStickBalanceQTE();
     }
@@ -39,6 +40,8 @@ public class QTEHandler {
     private void generateRandomEvent() {
         int eventTypeIndex = random.nextInt(EVENT_TYPES.values().length);
         EVENT_TYPES eventType = EVENT_TYPES.values()[eventTypeIndex];
+
+        callback.onNewQTE(eventType);
 
         switch (eventType) {
             case CUP_COOLING:
