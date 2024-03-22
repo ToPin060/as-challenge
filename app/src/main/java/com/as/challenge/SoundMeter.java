@@ -43,7 +43,6 @@ public class SoundMeter {
 
     public boolean isBlowingOnMicrophone() {
         double amplitude = getAmplitude();
-        System.out.println("AMPLITUDE + " + amplitude);
         return amplitude > MIN_BLOWING_AMPLITUDE;
     }
 

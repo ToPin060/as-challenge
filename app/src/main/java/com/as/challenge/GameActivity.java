@@ -132,13 +132,6 @@ public class GameActivity extends Activity {
         editor.apply();
     }
 
-    private void setupSoundMeter() {
-        soundMeter = new SoundMeter();
-        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_REQUEST_CODE);
-        } else soundMeter.start(this);
-    }
-
     private void handleSoundMeterPermissionResult(@NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             soundMeter.start(this);
