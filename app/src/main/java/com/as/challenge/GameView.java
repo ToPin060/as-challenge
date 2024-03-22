@@ -40,10 +40,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
         _activity = (GameActivity) context_;
         _thread = new GameThread(getHolder(), this);
 
-        deadlyZoneQTE = new DeadlyZoneQTE(this);
 
         setTouillette(context_, R.drawable.touillette_neutral);
         setTouilletteCoords(_xTou, _yTou);
+
+        deadlyZoneQTE = new DeadlyZoneQTE(this, _touillette);
 
         setOnTouchListener(this);
         setFocusable(true);
