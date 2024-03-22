@@ -49,7 +49,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Vie
 
         _teacup = new Teacup(_activity, R.drawable.teacup_neutral_avg_size);
 
-
         this.QTEs.add(new DeadlyZoneQTE(this, _touillette));
         teacupCoolingQTE = new TeacupCoolingQTE(this, _teacup);
         this.QTEs.add(teacupCoolingQTE);
