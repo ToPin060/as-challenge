@@ -11,14 +11,14 @@ import java.util.Random;
 
 public class DeadlyZoneQTE {
     private static final int FLASH_INTERVAL = 300; // Time between flashes in milliseconds
+    private final GameView gameView;
+    private final Random rd;
     boolean isLeftZone;
     private boolean drawZone = false;
-    private final GameView gameView;
     private boolean isTriggered = false;
     private boolean isTimerRunning = false; // Variable to track timer status
     private CountDownTimer countDownTimer; // Timer object
-    private final Random rd;
-    private Drawable touillette;
+    private final Drawable touillette;
 
     public DeadlyZoneQTE(GameView gameView, Drawable touillette) {
         this.gameView = gameView;
@@ -70,7 +70,7 @@ public class DeadlyZoneQTE {
 
     private boolean maybeKillTouillette() {
         // TODO KILL TOUILLETTE / GAME OVER
-       return getZoneBox().contains(touillette.getBounds().centerX(), touillette.getBounds().centerY());
+        return getZoneBox().contains(touillette.getBounds().centerX(), touillette.getBounds().centerY());
     }
 
     private void startTimer() {

@@ -9,6 +9,7 @@ public class QTEHandler {
     private static final int MAX_SLEEP_TIME_MS = 15000;
     private final Callback callback;
     private final Random random;
+
     public QTEHandler(Callback callback) {
         this.callback = callback;
         this.random = new Random();
