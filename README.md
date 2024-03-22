@@ -2,7 +2,7 @@
 
 ## Team
 
-- Hamdi LAAZAR
+- Hamdi LAZAAR
 - Mehdi HAZM
 - Antoine MAIRESSE
 - Tristan PINTO
