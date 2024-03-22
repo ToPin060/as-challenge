@@ -35,6 +35,19 @@ public class GameActivity extends Activity {
         if (_resetEnvironmentFlag) resetEnvironment();
         else recoverEnvironment();
 
+        // TODO REMOVE : Exemple usage of QTEHandler
+        QTEHandler test = new QTEHandler(new QTEHandler.Callback() {
+            @Override
+            public void launchCupCoolingQTE() {
+                System.out.println("CUP COOLING QTE");
+            }
+
+            @Override
+            public void launchStickBalanceQTE() {
+                System.out.println("STICK BALANCE QTE");
+            }
+        });
+
         setupSoundMeter();
         setContentView(new GameView(this));
     }
