@@ -1,7 +1,5 @@
 package com.as.challenge;
 
-import static java.lang.Thread.sleep;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
@@ -13,8 +11,9 @@ import androidx.core.app.ActivityCompat;
 public class SoundMeter {
 
     private static final int sampleRate = 8000;
-    private AudioRecord ar = null;
+    private AudioRecord audioRecord = null;
     private int minSize;
+    private final static int MIN_BLOWING_AMPLITUDE = 5000;
 
     public void start(Context context) {
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -22,31 +21,17 @@ public class SoundMeter {
             return;
         }
         minSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        ar = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, minSize);
-        ar.startRecording();
-
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    System.out.println("TEST " + this.getAmplitude());
-                    sleep(600);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, minSize);
+        audioRecord.startRecording();
     }
 
     public void stop() {
-        if (ar != null) {
-            ar.stop();
-        }
+        if (audioRecord != null) audioRecord.stop();
     }
 
     public double getAmplitude() {
         short[] buffer = new short[minSize];
-        ar.read(buffer, 0, minSize);
+        audioRecord.read(buffer, 0, minSize);
         int max = 0;
         for (short s : buffer) {
             if (Math.abs(s) > max) {
@@ -58,7 +43,7 @@ public class SoundMeter {
 
     public boolean isBlowingOnMicrophone() {
         double amplitude = getAmplitude();
-        return amplitude > 5000;
+        return amplitude > MIN_BLOWING_AMPLITUDE;
     }
 
 }
