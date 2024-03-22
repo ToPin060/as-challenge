@@ -3,9 +3,6 @@ package com.as.challenge;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -13,13 +10,10 @@ import androidx.annotation.NonNull;
 
 import com.as.challenge.utility.Constants;
 
-import java.util.ArrayList;
-
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private GameActivity _activity;
-    private GameThread _thread;
     public DeadlyZoneQTE deadlyZoneQTE;
-
+    private final GameActivity _activity;
+    private final GameThread _thread;
     private int _x = 0;
     private int _y = 0;
 
@@ -41,10 +35,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         _thread.setRunning(true);
         _thread.start();
     }
+
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
 
     }
+
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         boolean retry = true;
@@ -68,10 +64,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    private void handleQTEs(Canvas canvas){
-        if(deadlyZoneQTE.isTriggered()){
-            deadlyZoneQTE.draw(canvas);
-        }
+    private void handleQTEs(Canvas canvas) {
+        if (deadlyZoneQTE.isTriggered()) deadlyZoneQTE.draw(canvas);
     }
 
     public void update() {

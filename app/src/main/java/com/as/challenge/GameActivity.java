@@ -16,8 +16,8 @@ import com.as.challenge.utility.Constants;
 public class GameActivity extends Activity {
     public final static Integer RECORD_AUDIO_REQUEST_CODE = 138038;
     private final static String TAG = "MainActivity";
-    private SharedPreferences _sharedPreferences;
     private final boolean _resetEnvironmentFlag = true;
+    private SharedPreferences _sharedPreferences;
     private SoundMeter soundMeter;
     private GameView gameView;
 

@@ -1,4 +1,5 @@
 package com.as.challenge;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -7,27 +8,27 @@ import android.os.CountDownTimer;
 import java.util.Random;
 
 public class DeadlyZoneQTE {
-    private boolean drawZone = false;
-    private GameView gameView;
     private final int flashInterval = 100; // Time between flashes in milliseconds
+    boolean isLeftZone;
+    private boolean drawZone = false;
+    private final GameView gameView;
     private boolean isTriggered = false;
     private boolean isTimerRunning = false; // Variable to track timer status
     private CountDownTimer countDownTimer; // Timer object
-    private Random rd;
-    boolean isLeftZone;
+    private final Random rd;
 
     public DeadlyZoneQTE(GameView gameView) {
         this.gameView = gameView;
         rd = new Random();
     }
 
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.rgb(250, 0, 0));
 
         if (isLeftZone && (drawZone || isTimerRunning)) {
             canvas.drawRect(0, (float) gameView.getHeight() / 2, (float) gameView.getWidth() / 2, gameView.getHeight(), paint);
-        } else if(drawZone || isTimerRunning){
+        } else if (drawZone || isTimerRunning) {
             canvas.drawRect((float) gameView.getWidth() / 2, (float) gameView.getHeight() / 2, gameView.getWidth(), gameView.getHeight(), paint);
         }
     }
@@ -63,6 +64,7 @@ public class DeadlyZoneQTE {
             public void onTick(long millisUntilFinished) {
                 isTimerRunning = true;
             }
+
             @Override
             public void onFinish() {
                 isTimerRunning = false;
