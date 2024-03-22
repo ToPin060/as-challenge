@@ -59,11 +59,6 @@ public class GameActivity extends Activity {
             }
 
             @Override
-            public QTE launchStickBalanceQTE() {
-                return null;
-            }
-
-            @Override
             public QTE launchDeadlyZoneQTE() {
                 if(_gameView != null) {
                     return _gameView.QTEs.get(0); // TODO CHANGE

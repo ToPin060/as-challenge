@@ -1,5 +1,6 @@
 package com.as.challenge.qte;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -7,6 +8,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 
+import com.as.challenge.DefeatActivity;
+import com.as.challenge.GameActivity;
 import com.as.challenge.GameView;
 
 import java.util.Random;
@@ -75,9 +78,14 @@ public class DeadlyZoneQTE implements QTE {
         thread.start();
     }
 
-    private boolean maybeKillTouillette() {
-        // TODO KILL TOUILLETTE / GAME OVER
-        return getZoneBox().contains(touillette.getBounds().centerX(), touillette.getBounds().centerY());
+    private void maybeKillTouillette() {
+        if(getZoneBox().contains(touillette.getBounds().centerX(), touillette.getBounds().centerY())) {
+            Intent gameIntent = new Intent(gameView._activity, DefeatActivity.class);
+            gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            gameView._activity.startActivity(gameIntent);
+            gameView._activity.finish();
+            gameView._activity.finishAffinity();
+        }
     }
 
     private void startTimer() {

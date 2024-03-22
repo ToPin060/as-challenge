@@ -5,8 +5,8 @@ import static java.lang.Thread.sleep;
 import java.util.Random;
 
 public class QTEHandler {
-    private static final int MIN_SLEEP_TIME_MS = 5000;
-    private static final int MAX_SLEEP_TIME_MS = 15000;
+    private static final int MIN_SLEEP_TIME_MS = 3000;
+    private static final int MAX_SLEEP_TIME_MS = 12000;
     private final Callback callback;
     private final Random random;
     private boolean QTEInProgress = false;
@@ -48,9 +48,6 @@ public class QTEHandler {
             case TEACUP_COOLING:
                 launchQTE(callback.launchTeacupCoolingQTE());
                 break;
-            case STICK_BALANCE:
-                launchQTE(callback.launchStickBalanceQTE());
-                break;
             case DEADLY_ZONES:
                 launchQTE(callback.launchDeadlyZoneQTE());
                 break;
@@ -58,15 +55,13 @@ public class QTEHandler {
     }
 
     public enum EVENT_TYPES {
-        TEACUP_COOLING, STICK_BALANCE, DEADLY_ZONES
+        TEACUP_COOLING, DEADLY_ZONES
     }
 
     public interface Callback {
         void onNewQTE(EVENT_TYPES eventType);
 
         QTE launchTeacupCoolingQTE();
-
-        QTE launchStickBalanceQTE();
 
         QTE launchDeadlyZoneQTE();
     }

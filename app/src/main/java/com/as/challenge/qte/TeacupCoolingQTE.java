@@ -1,5 +1,6 @@
 package com.as.challenge.qte;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -7,6 +8,7 @@ import android.os.CountDownTimer;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.as.challenge.DefeatActivity;
 import com.as.challenge.GameView;
 import com.as.challenge.R;
 import com.as.challenge.SoundMeter;
@@ -25,7 +27,7 @@ public class TeacupCoolingQTE implements QTE {
     private SoundMeter soundMeter;
     private Thread thread;
     private QTE.Callback callback;
-    private int temperature = 5; // TODO MAP EACH TEMPERATURE TO AN IMAGE OF TEACUP
+    private int temperature = 3;
 
     public TeacupCoolingQTE(GameView gameView, Teacup teacup) {
         this.gameView = gameView;
@@ -37,7 +39,6 @@ public class TeacupCoolingQTE implements QTE {
     }
 
     public void draw(Canvas canvas) {
-        // TODO change teacup img
     }
 
     public void trigger(QTE.Callback callback) {
@@ -74,8 +75,15 @@ public class TeacupCoolingQTE implements QTE {
         }
     }
 
+    private void loose(){
+        Intent gameIntent = new Intent(gameView._activity, DefeatActivity.class);
+        gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        gameView._activity.startActivity(gameIntent);
+        gameView._activity.finish();
+        gameView._activity.finishAffinity();
+    }
+
     private void finishQTE(){
-        // TODO CHECK IF TEACUP STILL HOT do something
         if(temperature <= 0) {
             teacup.setDrawableResource(R.drawable.teacup_neutral_avg_size);
         }
@@ -83,7 +91,8 @@ public class TeacupCoolingQTE implements QTE {
         isTriggered = false;
         soundMeter.stop();
         callback.onQTEFinish();
-        temperature = 5; // reset
+        if(temperature > 0) loose();
+        temperature = 3; // reset
     }
 
     public boolean isTriggered() {
@@ -91,7 +100,7 @@ public class TeacupCoolingQTE implements QTE {
     }
 
     private void startTimer() {
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(20000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 threadRunning = true;
