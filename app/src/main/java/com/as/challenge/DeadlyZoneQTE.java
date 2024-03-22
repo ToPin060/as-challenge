@@ -8,7 +8,7 @@ import android.os.CountDownTimer;
 import java.util.Random;
 
 public class DeadlyZoneQTE {
-    private final int flashInterval = 100; // Time between flashes in milliseconds
+    private final int flashInterval = 300; // Time between flashes in milliseconds
     boolean isLeftZone;
     private boolean drawZone = false;
     private final GameView gameView;
@@ -59,7 +59,7 @@ public class DeadlyZoneQTE {
     }
 
     private void startTimer() {
-        countDownTimer = new CountDownTimer(2000, 1000) {
+        countDownTimer = new CountDownTimer(3500, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 isTimerRunning = true;

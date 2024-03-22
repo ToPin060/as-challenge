@@ -5,8 +5,8 @@ import static java.lang.Thread.sleep;
 import java.util.Random;
 
 public class QTEHandler {
-    private static final int MIN_SLEEP_TIME_MS = 1000;
-    private static final int MAX_SLEEP_TIME_MS = 3000;
+    private static final int MIN_SLEEP_TIME_MS = 5000;
+    private static final int MAX_SLEEP_TIME_MS = 15000;
     private final Callback callback;
     private final Random random;
     public QTEHandler(Callback callback) {
